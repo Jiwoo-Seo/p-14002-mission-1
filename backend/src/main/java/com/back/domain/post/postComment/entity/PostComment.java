@@ -6,11 +6,9 @@ import com.back.global.exception.ServiceException;
 import com.back.global.jpa.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
 @NoArgsConstructor
 public class PostComment extends BaseEntity {
     @ManyToOne
@@ -23,6 +21,18 @@ public class PostComment extends BaseEntity {
         this.author = author;
         this.post = post;
         this.content = content;
+    }
+
+    public Member getAuthor() {
+        return author;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public void modify(String content) {
