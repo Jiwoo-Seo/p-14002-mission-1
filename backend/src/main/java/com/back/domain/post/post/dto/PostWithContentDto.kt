@@ -5,21 +5,14 @@ import lombok.Getter
 import java.time.LocalDateTime
 
 @Getter
-class PostWithContentDto private constructor(
-    id: Int,
-    createDate: LocalDateTime,
-    modifyDate: LocalDateTime,
-    authorId: Int,
-    authorName: String,
-    title: String,
+data class PostWithContentDto (
+    val id: Int,
+    val createDate: LocalDateTime,
+    val modifyDate: LocalDateTime,
+    val authorId: Int,
+    val authorName: String,
+    val title: String,
     val content: String
-) : PostDto(
-    id,
-    createDate,
-    modifyDate,
-    authorId,
-    authorName,
-    title
 ) {
     constructor(post: Post) : this(
         id = post.id,
