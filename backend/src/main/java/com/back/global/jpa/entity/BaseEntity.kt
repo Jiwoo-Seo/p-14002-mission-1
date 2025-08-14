@@ -13,7 +13,7 @@ abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null
+    var id: Long? = null
         protected set
 
     @CreatedDate
@@ -24,7 +24,7 @@ abstract class BaseEntity {
     var modifyDate: LocalDateTime? = null
         private set
 
-    protected fun setId(id: Int) {
+    protected fun setId(id: Long) {
         this.id = id
     }
 

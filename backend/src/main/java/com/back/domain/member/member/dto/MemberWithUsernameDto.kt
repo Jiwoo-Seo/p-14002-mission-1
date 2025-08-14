@@ -4,7 +4,7 @@ import com.back.domain.member.member.entity.Member
 import java.time.LocalDateTime
 
 data class MemberWithUsernameDto(
-    val id: Int,
+    val id: Long,
     val createDate: LocalDateTime,
     val modifyDate: LocalDateTime,
     val isAdmin: Boolean,
@@ -13,12 +13,12 @@ data class MemberWithUsernameDto(
     val profileImageUrl: String,
 ) {
     constructor(member: Member) : this(
-        id = member.id,
-        createDate = member.createDate,
-        modifyDate = member.modifyDate,
+        id = member.id!!,
+        createDate = member.createDate!!,
+        modifyDate = member.modifyDate!!,
         isAdmin = member.isAdmin,
-        username = member.username,
-        name = member.name,
+        username = member.username!!,
+        name = member.name!!,
         profileImageUrl = member.profileImgUrlOrDefault
     )
 }

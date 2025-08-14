@@ -16,10 +16,10 @@ class CustomUserDetailsService(
             .orElseThrow { UsernameNotFoundException("사용자를 찾을 수 없습니다.") }
 
         return SecurityUser(
-            member.id,
-            member.username,
+            member.id!!,
+            member.username!!,
             "",
-            member.nickname,
+            member.name,
             member.authorities
         )
     }

@@ -24,7 +24,7 @@ class CustomOAuth2LoginSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication
     ) {
-        val actor = rq.actorFromDb
+        val actor = rq.getActor()
         val accessToken = memberService.genAccessToken(actor)
 
         rq.setCookie("apiKey", actor.apiKey)

@@ -27,14 +27,13 @@ class Member() : BaseEntity() {
     var profileImgUrl: String? = null
         private set
 
-
-    constructor(id: Int, username: String?, nickname: String?) : this() {
+    constructor(id: Long, username: String?, nickname: String?) : this() {
         setId(id)
         this.username = username
         this.name = nickname
     }
 
-    constructor(username: String?, password: String?, nickname: String?, profileImgUrl: String?) : this() {
+    constructor(username: String?, password: String?, nickname: String?, profileImgUrl: String? = null) : this() {
         this.username = username
         this.password = password
         this.name = nickname

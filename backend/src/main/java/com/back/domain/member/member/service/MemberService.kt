@@ -6,6 +6,7 @@ import com.back.global.exception.ServiceException
 import com.back.global.rsData.RsData
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class MemberService(
@@ -34,8 +35,8 @@ class MemberService(
         return memberRepository.save(member)
     }
 
-    fun findByUsername(username: String): Member? =
-        memberRepository.findByUsername(username)
+    fun findByUsername(username: String): Optional<Member> =
+        Optional.ofNullable(memberRepository.findByUsername(username))
 
     fun findByApiKey(apiKey: String): Member? =
         memberRepository.findByApiKey(apiKey)
@@ -43,11 +44,11 @@ class MemberService(
     fun genAccessToken(member: Member): String =
         authTokenService.genAccessToken(member)
 
-    fun payload(accessToken: String): Map<String, Any> =
+    fun payload(accessToken: String): Map<String, Any>? =
         authTokenService.payload(accessToken)
 
-    fun findById(id: Int): Member? =
-        memberRepository.findById(id).orElse(null)
+    fun findById(id: Long): Optional<Member> =
+        memberRepository.findById(id)
 
     fun findAll(): List<Member> =
         memberRepository.findAll()
@@ -64,7 +65,7 @@ class MemberService(
         nickname: String?,
         profileImgUrl: String?
     ): RsData<Member> {
-        val existingMember = findByUsername(username)
+        val existingMember = findByUsername(username).orElse(null)
 
         return if (existingMember == null) {
             val newMember = join(username, password, nickname, profileImgUrl)

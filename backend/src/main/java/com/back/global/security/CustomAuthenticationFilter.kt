@@ -97,7 +97,7 @@ class CustomAuthenticationFilter(
         // Access Token으로 먼저 시도
         if (accessToken.isNotBlank()) {
             memberService.payload(accessToken)?.let { payload ->
-                val id = payload["id"] as? Int ?: throw ServiceException("401-4", "유효하지 않은 토큰입니다.")
+                val id = (payload["id"] as Number).toLong()
                 val username = payload["username"] as? String
                 val name = payload["name"] as? String
                 return Member(id, username, name)
@@ -132,11 +132,11 @@ class CustomAuthenticationFilter(
     }
 
     private fun handleServiceException(e: ServiceException, response: HttpServletResponse) {
-        val rsData = e.rsData
+        val rsDataObj = e.getRsData()
         response.apply {
             contentType = "application/json;charset=UTF-8"
-            status = rsData.statusCode
-            writer.write(toString(rsData))
+            status = rsDataObj.statusCode
+            writer.write(toString(rsDataObj))
         }
     }
 }

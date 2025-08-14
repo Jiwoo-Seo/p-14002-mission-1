@@ -1,7 +1,6 @@
 package com.back.domain.post.post.controller;
 
 import com.back.domain.member.member.service.MemberService;
-import com.back.domain.post.post.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
