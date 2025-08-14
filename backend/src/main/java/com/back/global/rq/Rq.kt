@@ -15,34 +15,32 @@ class Rq(
     private val resp: HttpServletResponse,
     private val memberService: MemberService,
 ) {
+
     val actor: Member
-        get() = SecurityContextHolder
-            .getContext()
+        get() = SecurityContextHolder.getContext()
             ?.authentication
             ?.principal
-            ?.let {
-                if (it is SecurityUser) {
-                    Member(it.id, it.username, it.nickname)
-                } else {
-                    null
-                }
+            ?.takeIf { it is SecurityUser }
+            ?.let { securityUser ->
+                val user = securityUser as SecurityUser
+                Member(user.id, user.username, user.nickname)
             }
             ?: throw IllegalStateException("인증된 사용자가 없습니다.")
 
     val actorFromDb: Member
-        get() = memberService.findById(actor.id).get()
+        get() = memberService.findById(actor.id!!)
+            ?: throw IllegalStateException("데이터베이스에서 사용자를 찾을 수 없습니다.")
 
-    fun getHeader(name: String, defaultValue: String): String {
-        return req.getHeader(name) ?: defaultValue
-    }
+    fun getHeader(name: String, defaultValue: String = ""): String =
+        req.getHeader(name) ?: defaultValue
 
     fun setHeader(name: String, value: String) {
         resp.setHeader(name, value)
     }
 
-    fun getCookieValue(name: String, defaultValue: String): String =
+    fun getCookieValue(name: String, defaultValue: String = ""): String =
         req.cookies
-            ?.firstOrNull { it.name == name }
+            ?.find { it.name == name }
             ?.value
             ?.takeIf { it.isNotBlank() }
             ?: defaultValue
@@ -56,15 +54,10 @@ class Rq(
             setAttribute("SameSite", "Strict")
             maxAge = if (value.isNullOrBlank()) 0 else 60 * 60 * 24 * 365
         }
-
         resp.addCookie(cookie)
     }
 
-    fun deleteCookie(name: String) {
-        setCookie(name, null)
-    }
+    fun deleteCookie(name: String) = setCookie(name, null)
 
-    fun sendRedirect(url: String) {
-        resp.sendRedirect(url)
-    }
+    fun sendRedirect(url: String) = resp.sendRedirect(url)
 }
