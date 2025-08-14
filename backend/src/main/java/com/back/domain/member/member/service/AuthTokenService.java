@@ -16,7 +16,7 @@ public class AuthTokenService {
     private int accessTokenExpirationSeconds;
 
     String genAccessToken(Member member) {
-        long id = member.getId();
+        long id = member.id;
         String username = member.getUsername();
         String name = member.getName();
 

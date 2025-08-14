@@ -51,9 +51,9 @@ public class ApiV1AdmMemberControllerTest {
         for (int i = 0; i < members.size(); i++) {
             Member member = members.get(i);
             resultActions
-                    .andExpect(jsonPath("$[%d].id".formatted(i)).value(member.getId()))
-                    .andExpect(jsonPath("$[%d].createDate".formatted(i)).value(Matchers.startsWith(member.getCreateDate().toString().substring(0, 20))))
-                    .andExpect(jsonPath("$[%d].modifyDate".formatted(i)).value(Matchers.startsWith(member.getModifyDate().toString().substring(0, 20))))
+                    .andExpect(jsonPath("$[%d].id".formatted(i)).value(member.id))
+                    .andExpect(jsonPath("$[%d].createDate".formatted(i)).value(Matchers.startsWith(member.createDate.toString().substring(0, 20))))
+                    .andExpect(jsonPath("$[%d].modifyDate".formatted(i)).value(Matchers.startsWith(member.modifyDate.toString().substring(0, 20))))
                     .andExpect(jsonPath("$[%d].name".formatted(i)).value(member.getName()))
                     .andExpect(jsonPath("$[%d].username".formatted(i)).value(member.getUsername()))
                     .andExpect(jsonPath("$[%d].isAdmin".formatted(i)).value(member.isAdmin()));
@@ -94,9 +94,9 @@ public class ApiV1AdmMemberControllerTest {
                 .andExpect(handler().handlerType(ApiV1AdmMemberController.class))
                 .andExpect(handler().methodName("getItem"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(member.getId()))
-                .andExpect(jsonPath("$.createDate").value(Matchers.startsWith(member.getCreateDate().toString().substring(0, 20))))
-                .andExpect(jsonPath("$.modifyDate").value(Matchers.startsWith(member.getModifyDate().toString().substring(0, 20))))
+                .andExpect(jsonPath("$.id").value(member.id))
+                .andExpect(jsonPath("$.createDate").value(Matchers.startsWith(member.createDate.toString().substring(0, 20))))
+                .andExpect(jsonPath("$.modifyDate").value(Matchers.startsWith(member.modifyDate.toString().substring(0, 20))))
                 .andExpect(jsonPath("$.name").value(member.getName()))
                 .andExpect(jsonPath("$.username").value(member.getUsername()))
                 .andExpect(jsonPath("$.isAdmin").value(member.isAdmin()));

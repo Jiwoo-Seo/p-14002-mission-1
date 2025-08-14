@@ -137,7 +137,7 @@ public class ApiV1PostCommentController {
 
         return new RsData<>(
                 "201-1",
-                "%d번 댓글이 작성되었습니다.".formatted(postComment.getId()),
+                "%d번 댓글이 작성되었습니다.".formatted(postComment.id),
                 new PostCommentDto(postComment)
         );
     }

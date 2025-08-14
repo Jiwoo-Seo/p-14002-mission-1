@@ -65,7 +65,7 @@ public class Post extends BaseEntity {
     public Optional<PostComment> findCommentById(int id) {
         return comments
                 .stream()
-                .filter(comment -> comment.getId() == id)
+                .filter(comment -> comment.id == id)
                 .findFirst();
     }
 
@@ -77,11 +77,11 @@ public class Post extends BaseEntity {
 
     public void checkActorCanModify(Member actor) {
         if (!author.equals(actor))
-            throw new ServiceException("403-1", "%d번 글 수정권한이 없습니다.".formatted(getId()));
+            throw new ServiceException("403-1", "%d번 글 수정권한이 없습니다.".formatted(id));
     }
 
     public void checkActorCanDelete(Member actor) {
         if (!author.equals(actor))
-            throw new ServiceException("403-2", "%d번 글 삭제권한이 없습니다.".formatted(getId()));
+            throw new ServiceException("403-2", "%d번 글 삭제권한이 없습니다.".formatted(id));
     }
 }
