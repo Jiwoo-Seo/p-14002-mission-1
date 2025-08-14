@@ -114,7 +114,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 rsData,
                 ResponseEntity
-                        .status(rsData.statusCode())
+                        .status(rsData.statusCode)
                         .build()
                         .getStatusCode()
         );
