@@ -8,17 +8,25 @@ import jakarta.persistence.Entity
 import jakarta.persistence.ManyToOne
 
 @Entity
-class PostComment(
-    @ManyToOne
-    val author: Member,
-    
-    @ManyToOne
-    val post: Post,
-    
-    var content: String
-) : BaseEntity() {
+class PostComment() : BaseEntity() {
 
-    fun getContent(): String = content
+    @ManyToOne
+    lateinit var author: Member
+
+    @ManyToOne
+    lateinit var post: Post
+
+    var content: String = ""
+
+    constructor(
+        author: Member,
+        post: Post,
+        content: String
+    ) : this() {
+        this.author = author
+        this.post = post
+        this.content = content
+    }
 
     fun modify(content: String) {
         this.content = content

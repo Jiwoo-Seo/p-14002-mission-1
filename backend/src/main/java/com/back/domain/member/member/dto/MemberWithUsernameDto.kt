@@ -14,11 +14,11 @@ data class MemberWithUsernameDto(
 ) {
     constructor(member: Member) : this(
         id = member.id!!,
-        createDate = member.createDate!!,
-        modifyDate = member.modifyDate!!,
+        createDate = member.createDate ?: LocalDateTime.now(),
+        modifyDate = member.modifyDate ?: LocalDateTime.now(),
         isAdmin = member.isAdmin,
         username = member.username!!,
-        name = member.name!!,
+        name = member.name ?: "",
         profileImageUrl = member.profileImgUrlOrDefault
     )
 }

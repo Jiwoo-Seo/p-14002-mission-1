@@ -28,11 +28,11 @@ class ApiV1MemberController(
         @field:NotBlank
         @field:Size(min = 2, max = 30)
         val username: String,
-        
+
         @field:NotBlank
         @field:Size(min = 2, max = 30)
         val password: String,
-        
+
         @field:NotBlank
         @field:Size(min = 2, max = 30)
         val nickname: String
@@ -59,7 +59,7 @@ class ApiV1MemberController(
         @field:NotBlank
         @field:Size(min = 2, max = 30)
         val username: String,
-        
+
         @field:NotBlank
         @field:Size(min = 2, max = 30)
         val password: String

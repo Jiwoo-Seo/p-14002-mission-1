@@ -53,7 +53,8 @@ class CustomAuthenticationFilter(
     ) {
         // API 요청이 아니거나 제외 경로라면 패스
         if (!request.requestURI.startsWith("/api/") ||
-            request.requestURI in EXCLUDED_PATHS) {
+            request.requestURI in EXCLUDED_PATHS
+        ) {
             filterChain.doFilter(request, response)
             return
         }
@@ -104,10 +105,17 @@ class CustomAuthenticationFilter(
             }
         }
 
-        // API Key로 인증
+        // API Key로 인증하고 새 Access Token 발급
         return if (apiKey.isNotBlank()) {
-            memberService.findByApiKey(apiKey)
+            val member = memberService.findByApiKey(apiKey)
                 ?: throw ServiceException("401-3", "API 키가 유효하지 않습니다.")
+
+            // 새 Access Token 발급 및 설정
+            val newAccessToken = memberService.genAccessToken(member)
+            rq.setCookie("accessToken", newAccessToken)
+            rq.setHeader("Authorization", newAccessToken)
+
+            member
         } else {
             throw ServiceException("401-5", "인증 정보가 없습니다.")
         }

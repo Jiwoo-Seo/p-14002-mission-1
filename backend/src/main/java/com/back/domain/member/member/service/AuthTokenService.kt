@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 class AuthTokenService(
     @Value("\${custom.jwt.secretKey}")
     private val jwtSecretKey: String,
-    
+
     @Value("\${custom.accessToken.expirationSeconds}")
     private val accessTokenExpirationSeconds: Int
 ) {
@@ -29,7 +29,7 @@ class AuthTokenService(
     fun payload(accessToken: String): Map<String, Any>? {
         val parsedPayload = Ut.jwt.payload(jwtSecretKey, accessToken) ?: return null
 
-        val id = parsedPayload["id"] as Long
+        val id = (parsedPayload["id"] as Number).toLong()
         val username = parsedPayload["username"] as String
         val name = parsedPayload["name"] as String
 

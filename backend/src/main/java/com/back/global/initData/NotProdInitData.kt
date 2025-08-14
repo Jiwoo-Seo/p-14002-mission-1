@@ -18,7 +18,7 @@ class NotProdInitData(
     private val memberService: MemberService,
     private val customConfigProperties: CustomConfigProperties
 ) {
-    
+
     @Autowired
     @Lazy
     private lateinit var self: NotProdInitData
@@ -71,7 +71,7 @@ class NotProdInitData(
 
         val post1 = postService.write(memberUser1, "제목 1", "내용 1")
         val post2 = postService.write(memberUser1, "제목 2", "내용 2")
-        val post3 = postService.write(memberUser2, "제목 3", "내용 3")
+        postService.write(memberUser2, "제목 3", "내용 3")
 
         post1.addComment(memberUser1, "댓글 1-1")
         post1.addComment(memberUser1, "댓글 1-2")

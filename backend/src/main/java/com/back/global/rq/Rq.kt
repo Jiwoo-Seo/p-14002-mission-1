@@ -16,19 +16,22 @@ class Rq(
     private val memberService: MemberService,
 ) {
 
-    fun getActor(): Member = actor
-    
-    private val actor: Member
-        get() = SecurityContextHolder.getContext()
-            ?.authentication
-            ?.principal
-            ?.takeIf { it is SecurityUser }
-            ?.let { securityUser ->
-                val user = securityUser as SecurityUser
-                Member(user.id, user.username, user.nickname ?: "")
-            }
-            ?: throw IllegalStateException("인증된 사용자가 없습니다.")
+    fun getActor(): Member {
+        val context = SecurityContextHolder.getContext()
+        val authentication = context?.authentication
+        val principal = authentication?.principal
 
+        if (principal is SecurityUser) {
+            return Member(principal.id, principal.username, principal.nickname ?: "")
+        }
+
+        throw IllegalStateException("인증된 사용자가 없습니다.")
+    }
+
+    fun getActorFromDb(): Member {
+        val actor = getActor()
+        return memberService.findById(actor.id!!).get()
+    }
 
     fun getHeader(name: String, defaultValue: String = ""): String =
         req.getHeader(name) ?: defaultValue

@@ -4,33 +4,42 @@ import com.back.domain.member.member.entity.Member
 import com.back.domain.post.postComment.entity.PostComment
 import com.back.global.exception.ServiceException
 import com.back.global.jpa.entity.BaseEntity
-import jakarta.persistence.*
 import jakarta.persistence.CascadeType.PERSIST
 import jakarta.persistence.CascadeType.REMOVE
+import jakarta.persistence.Entity
 import jakarta.persistence.FetchType.LAZY
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import java.util.*
 
 @Entity
-class Post(
+class Post() : BaseEntity() {
+
     @ManyToOne
-    val author: Member,
-    
-    var title: String,
-    var content: String
-) : BaseEntity() {
+    lateinit var author: Member
+
+    var title: String = ""
+    var content: String = ""
+
+    constructor(
+        author: Member,
+        title: String,
+        content: String
+    ) : this() {
+        this.author = author
+        this.title = title
+        this.content = content
+    }
 
     @OneToMany(mappedBy = "post", fetch = LAZY, cascade = [PERSIST, REMOVE], orphanRemoval = true)
     private val _comments: MutableList<PostComment> = mutableListOf()
-    
+
     val comments: List<PostComment> get() = _comments.toList()
 
     fun modify(title: String, content: String) {
         this.title = title
         this.content = content
     }
-
-    fun getTitle(): String = title
-    fun getContent(): String = content
 
     fun addComment(author: Member, content: String): PostComment {
         val postComment = PostComment(author, this, content)
