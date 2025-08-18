@@ -12,20 +12,20 @@ class Member() : BaseEntity() {
 
     @Column(unique = true)
     var username: String? = null
-        private set
+        protected set
 
     var password: String? = null
-        private set
+        protected set
 
     var name: String? = null
-        private set
+        protected set
 
     @Column(unique = true)
     var apiKey: String? = null
-        private set
+        protected set
 
     var profileImgUrl: String? = null
-        private set
+        protected set
 
     constructor(id: Long, username: String?, nickname: String?) : this() {
         setId(id)

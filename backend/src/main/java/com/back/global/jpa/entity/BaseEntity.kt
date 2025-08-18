@@ -18,11 +18,11 @@ abstract class BaseEntity {
 
     @CreatedDate
     var createDate: LocalDateTime? = null
-        private set
+        protected set
 
     @LastModifiedDate
     var modifyDate: LocalDateTime? = null
-        private set
+        protected set
 
     protected fun setId(id: Long) {
         this.id = id
