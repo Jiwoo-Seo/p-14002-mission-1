@@ -1,6 +1,9 @@
 package com.back.domain.member.member.entity
 
 import com.back.global.jpa.entity.BaseEntity
+import com.back.standard.util.base64Decode
+import com.back.standard.util.base64Encode
+import com.back.standard.util.getOrThrow
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import org.springframework.security.core.GrantedAuthority
@@ -63,4 +66,25 @@ class Member() : BaseEntity() {
 
     val profileImgUrlOrDefault: String
         get() = profileImgUrl ?: "https://placehold.co/600x600?text=U_U"
+
+
+    val encodedApiKey: String?
+        get() = apiKey?.base64Encode()
+
+    fun decodeApiKey(encodedKey: String): String {
+        return encodedKey.base64Decode()
+    }
+
+    fun getUsernameOrThrow(): String {
+        return username.getOrThrow()
+    }
+
+    fun getNameOrThrow(): String {
+        return name.getOrThrow()
+    }
+
+    fun generateEncodedApiKey() {
+        val rawApiKey = UUID.randomUUID().toString()
+        this.apiKey = rawApiKey.base64Encode()
+    }
 }
