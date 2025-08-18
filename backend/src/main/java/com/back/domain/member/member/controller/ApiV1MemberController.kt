@@ -76,7 +76,7 @@ class ApiV1MemberController(
     @Operation(summary = "로그인")
     fun login(@Valid @RequestBody reqBody: MemberLoginReqBody): RsData<MemberLoginResBody> {
         val member = memberService.findByUsername(reqBody.username)
-            .orElseThrow { ServiceException("401-1", "존재하지 않는 아이디입니다.") }
+            ?: throw ServiceException("401-1", "존재하지 않는 아이디입니다.")
 
         memberService.checkPassword(member, reqBody.password)
 

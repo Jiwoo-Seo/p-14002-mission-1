@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+
 package com.back.domain.member.member.controller
 
 import com.back.domain.member.member.service.MemberService
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -31,7 +34,7 @@ class ApiV1MemberControllerTest(
     @DisplayName("회원가입")
     fun `회원가입이 성공한다`() {
         // When
-        val resultActions = mvc.perform(
+        val resultActions: ResultActions = mvc.perform(
             post("/api/v1/members")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -46,7 +49,7 @@ class ApiV1MemberControllerTest(
         ).andDo(print())
 
         // Then
-        val member = memberService.findByUsername("usernew").get()
+        val member = memberService.findByUsername("usernew")!!
 
         resultActions
             .andExpect(handler().handlerType(ApiV1MemberController::class.java))
@@ -56,8 +59,8 @@ class ApiV1MemberControllerTest(
             .andExpect(jsonPath("$.msg").value("${member.name}님 환영합니다. 회원가입이 완료되었습니다."))
             .andExpect(jsonPath("$.data").exists())
             .andExpect(jsonPath("$.data.id").value(member.id))
-            .andExpect(jsonPath("$.data.createDate").value(startsWith(member.createDate.toString().substring(0, 20))))
-            .andExpect(jsonPath("$.data.modifyDate").value(startsWith(member.modifyDate.toString().substring(0, 20))))
+            .andExpect(jsonPath("$.data.createDate").value(startsWith(member.createDate.toString().substring(0, 20)) as org.hamcrest.Matcher<in String>))
+            .andExpect(jsonPath("$.data.modifyDate").value(startsWith(member.modifyDate.toString().substring(0, 20)) as org.hamcrest.Matcher<in String>))
             .andExpect(jsonPath("$.data.name").value(member.name))
             .andExpect(jsonPath("$.data.isAdmin").value(member.isAdmin))
     }
@@ -66,7 +69,7 @@ class ApiV1MemberControllerTest(
     @DisplayName("로그인")
     fun `로그인이 성공하고 쿠키가 설정된다`() {
         // When
-        val resultActions = mvc.perform(
+        val resultActions: ResultActions = mvc.perform(
             post("/api/v1/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -80,7 +83,7 @@ class ApiV1MemberControllerTest(
         ).andDo(print())
 
         // Then
-        val member = memberService.findByUsername("user1").get()
+        val member = memberService.findByUsername("user1")!!
 
         resultActions
             .andExpect(handler().handlerType(ApiV1MemberController::class.java))
@@ -113,11 +116,11 @@ class ApiV1MemberControllerTest(
     @WithUserDetails("user1")
     fun `내 정보 조회가 성공한다`() {
         // When
-        val resultActions = mvc.perform(get("/api/v1/members/me"))
+        val resultActions: ResultActions = mvc.perform(get("/api/v1/members/me"))
             .andDo(print())
 
         // Then
-        val member = memberService.findByUsername("user1").get()
+        val member = memberService.findByUsername("user1")!!
 
         resultActions
             .andExpect(handler().handlerType(ApiV1MemberController::class.java))
@@ -136,10 +139,10 @@ class ApiV1MemberControllerTest(
     @WithUserDetails("user1")
     fun `API 키 쿠키로 내 정보 조회가 성공한다`() {
         // Given
-        val actor = memberService.findByUsername("user1").get()
+        val actor = memberService.findByUsername("user1")!!
 
         // When
-        val resultActions = mvc.perform(
+        val resultActions: ResultActions = mvc.perform(
             get("/api/v1/members/me")
                 .cookie(Cookie("apiKey", actor.apiKey))
         ).andDo(print())
@@ -155,7 +158,7 @@ class ApiV1MemberControllerTest(
     @DisplayName("로그아웃")
     fun `로그아웃시 쿠키가 삭제된다`() {
         // When
-        val resultActions = mvc.perform(delete("/api/v1/members/logout"))
+        val resultActions: ResultActions = mvc.perform(delete("/api/v1/members/logout"))
             .andDo(print())
 
         // Then
@@ -185,10 +188,10 @@ class ApiV1MemberControllerTest(
     @WithUserDetails("user1")
     fun `잘못된 액세스 토큰시 API 키로 재발급한다`() {
         // Given
-        val actor = memberService.findByUsername("user1").get()
+        val actor = memberService.findByUsername("user1")!!
 
         // When
-        val resultActions = mvc.perform(
+        val resultActions: ResultActions = mvc.perform(
             get("/api/v1/members/me")
                 .header("Authorization", "Bearer ${actor.apiKey} wrong-access-token")
         ).andDo(print())
@@ -215,7 +218,7 @@ class ApiV1MemberControllerTest(
     @DisplayName("Authorization 헤더가 Bearer 형식이 아닐 때 오류")
     fun `잘못된 Authorization 헤더시 오류를 반환한다`() {
         // When
-        val resultActions = mvc.perform(
+        val resultActions: ResultActions = mvc.perform(
             get("/api/v1/members/me")
                 .header("Authorization", "key")
         ).andDo(print())

@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+
 package com.back.domain.post.post.controller
 
 import com.back.domain.member.member.service.MemberService

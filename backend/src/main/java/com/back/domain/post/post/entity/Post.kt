@@ -64,11 +64,8 @@ class Post() : BaseEntity() {
         return postComment
     }
 
-    fun findCommentById(id: Long): Optional<PostComment> {
-        return _comments
-            .firstOrNull { it.id == id }
-            ?.let { Optional.of(it) }
-            ?: Optional.empty()
+    fun findCommentById(id: Long): PostComment? {
+        return _comments.firstOrNull { it.id == id }
     }
 
     fun deleteComment(postComment: PostComment?): Boolean {

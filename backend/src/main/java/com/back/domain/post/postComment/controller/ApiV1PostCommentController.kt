@@ -2,6 +2,7 @@ package com.back.domain.post.postComment.controller
 
 import com.back.domain.post.post.service.PostService
 import com.back.domain.post.postComment.dto.PostCommentDto
+import com.back.global.exception.ServiceException
 import com.back.global.rq.Rq
 import com.back.global.rsData.RsData
 import io.swagger.v3.oas.annotations.Operation
@@ -26,7 +27,7 @@ class ApiV1PostCommentController(
     @Transactional(readOnly = true)
     @Operation(summary = "다건 조회")
     fun getItems(@PathVariable postId: Long): List<PostCommentDto> {
-        val post = postService.findById(postId).get()
+        val post = postService.findById(postId) ?: throw ServiceException("404-1", "${postId}번 글을 찾을 수 없습니다.")
         return post.comments.map { PostCommentDto(it) }
     }
 
@@ -37,8 +38,8 @@ class ApiV1PostCommentController(
         @PathVariable postId: Long,
         @PathVariable id: Long
     ): PostCommentDto {
-        val post = postService.findById(postId).get()
-        val postComment = post.findCommentById(id).get()
+        val post = postService.findById(postId) ?: throw ServiceException("404-1", "${postId}번 글을 찾을 수 없습니다.")
+        val postComment = post.findCommentById(id) ?: throw ServiceException("404-1", "${id}번 댓글을 찾을 수 없습니다.")
         return PostCommentDto(postComment)
     }
 
@@ -50,8 +51,8 @@ class ApiV1PostCommentController(
         @PathVariable id: Long
     ): RsData<Void> {
         val actor = rq.getActor()
-        val post = postService.findById(postId).get()
-        val postComment = post.findCommentById(id).get()
+        val post = postService.findById(postId) ?: throw ServiceException("404-1", "${postId}번 글을 찾을 수 없습니다.")
+        val postComment = post.findCommentById(id) ?: throw ServiceException("404-1", "${id}번 댓글을 찾을 수 없습니다.")
 
         postComment.checkActorCanDelete(actor)
         postService.deleteComment(post, postComment)
@@ -74,8 +75,8 @@ class ApiV1PostCommentController(
         @Valid @RequestBody reqBody: PostCommentModifyReqBody
     ): RsData<Void> {
         val actor = rq.getActor()
-        val post = postService.findById(postId).get()
-        val postComment = post.findCommentById(id).get()
+        val post = postService.findById(postId) ?: throw ServiceException("404-1", "${postId}번 글을 찾을 수 없습니다.")
+        val postComment = post.findCommentById(id) ?: throw ServiceException("404-1", "${id}번 댓글을 찾을 수 없습니다.")
 
         postComment.checkActorCanModify(actor)
         postService.modifyComment(postComment, reqBody.content)
@@ -97,7 +98,7 @@ class ApiV1PostCommentController(
         @Valid @RequestBody reqBody: PostCommentWriteReqBody
     ): RsData<PostCommentDto> {
         val actor = rq.getActor()
-        val post = postService.findById(postId).get()
+        val post = postService.findById(postId) ?: throw ServiceException("404-1", "${postId}번 글을 찾을 수 없습니다.")
 
         val postComment = postService.writeComment(actor, post, reqBody.content)
 

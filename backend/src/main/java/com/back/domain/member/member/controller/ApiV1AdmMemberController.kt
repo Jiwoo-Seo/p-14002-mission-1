@@ -2,6 +2,7 @@ package com.back.domain.member.member.controller
 
 import com.back.domain.member.member.dto.MemberWithUsernameDto
 import com.back.domain.member.member.service.MemberService
+import com.back.global.exception.ServiceException
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -31,7 +32,7 @@ class ApiV1AdmMemberController(
     @Transactional(readOnly = true)
     @Operation(summary = "단건 조회")
     fun getItem(@PathVariable id: Long): MemberWithUsernameDto {
-        val member = memberService.findById(id).get()
+        val member = memberService.findById(id) ?: throw ServiceException("404-1", "${id}번 회원을 찾을 수 없습니다.")
         return MemberWithUsernameDto(member)
     }
 }

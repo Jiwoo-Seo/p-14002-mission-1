@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+
 package com.back.domain.post.postComment.controller
 
 import com.back.domain.member.member.service.MemberService
@@ -38,8 +40,8 @@ class ApiV1PostCommentControllerTest(
             .andDo(print())
 
         // Then
-        val post = postService.findById(postId).get()
-        val comment = post.findCommentById(commentId).get()
+        val post = postService.findById(postId)!!
+        val comment = post.findCommentById(commentId)!!
 
         resultActions
             .andExpect(handler().handlerType(ApiV1PostCommentController::class.java))
@@ -63,7 +65,7 @@ class ApiV1PostCommentControllerTest(
             .andDo(print())
 
         // Then
-        val post = postService.findById(postId).get()
+        val post = postService.findById(postId)!!
         val comments = post.comments
 
         resultActions
@@ -155,7 +157,7 @@ class ApiV1PostCommentControllerTest(
         // Given
         val postId = 1L
         val commentId = 1L
-        val actor = memberService.findByUsername("user3").get()
+        val actor = memberService.findByUsername("user3")!!
 
         // When
         val resultActions = mvc.perform(
@@ -185,7 +187,7 @@ class ApiV1PostCommentControllerTest(
         // Given
         val postId = 1L
         val commentId = 1L
-        val actor = memberService.findByUsername("user3").get()
+        val actor = memberService.findByUsername("user3")!!
 
         // When
         val resultActions = mvc.perform(

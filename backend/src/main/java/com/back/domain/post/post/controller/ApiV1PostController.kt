@@ -4,6 +4,7 @@ import com.back.domain.member.member.service.MemberService
 import com.back.domain.post.post.dto.PostDto
 import com.back.domain.post.post.dto.PostWithContentDto
 import com.back.domain.post.post.service.PostService
+import com.back.global.exception.ServiceException
 import com.back.global.rq.Rq
 import com.back.global.rsData.RsData
 import io.swagger.v3.oas.annotations.Operation
@@ -29,7 +30,7 @@ class ApiV1PostController(
     @Transactional(readOnly = true)
     @Operation(summary = "다건 조회")
     fun getItems(): List<PostDto> {
-        val items = postService.findAll()
+        val items = postService.findAllByOrderByIdDesc()
         return items.map { PostDto(it) }
     }
 
@@ -37,7 +38,7 @@ class ApiV1PostController(
     @Transactional(readOnly = true)
     @Operation(summary = "단건 조회")
     fun getItem(@PathVariable id: Long): PostWithContentDto {
-        val post = postService.findById(id).get()
+        val post = postService.findById(id) ?: throw ServiceException("404-1", "${id}번 글을 찾을 수 없습니다.")
         return PostWithContentDto(post)
     }
 
@@ -46,7 +47,7 @@ class ApiV1PostController(
     @Operation(summary = "삭제")
     fun delete(@PathVariable id: Long): RsData<Void> {
         val actor = rq.getActor()
-        val post = postService.findById(id).get()
+        val post = postService.findById(id) ?: throw ServiceException("404-1", "${id}번 글을 찾을 수 없습니다.")
 
         post.checkActorCanDelete(actor)
         postService.delete(post)
@@ -69,7 +70,7 @@ class ApiV1PostController(
     @Operation(summary = "작성")
     fun write(@Valid @RequestBody reqBody: PostWriteReqBody): RsData<PostDto> {
         val actor = rq.getActor()
-        val post = postService.write(actor, reqBody.title, reqBody.content)
+        val post = postService.write(actor, reqBody.title, reqBody.content, true, true)
 
         return RsData(
             "201-1",
@@ -96,10 +97,10 @@ class ApiV1PostController(
         @Valid @RequestBody reqBody: PostModifyReqBody
     ): RsData<Void> {
         val actor = rq.getActor()
-        val post = postService.findById(id).get()
+        val post = postService.findById(id) ?: throw ServiceException("404-1", "${id}번 글을 찾을 수 없습니다.")
 
         post.checkActorCanModify(actor)
-        postService.modify(post, reqBody.title, reqBody.content)
+        postService.modify(post, reqBody.title, reqBody.content, true, true)
 
         return RsData("200-1", "${post.id}번 글이 수정되었습니다.")
     }

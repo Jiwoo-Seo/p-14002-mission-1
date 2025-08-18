@@ -30,7 +30,7 @@ class Rq(
 
     fun getActorFromDb(): Member {
         val actor = getActor()
-        return memberService.findById(actor.id!!).get()
+        return memberService.findById(actor.id!!) ?: throw IllegalStateException("사용자를 찾을 수 없습니다.")
     }
 
     fun getHeader(name: String, defaultValue: String = ""): String =

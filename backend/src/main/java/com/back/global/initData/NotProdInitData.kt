@@ -65,13 +65,13 @@ class NotProdInitData(
     fun work2() {
         if (postService.count() > 0) return
 
-        val memberUser1 = memberService.findByUsername("user1").get()
-        val memberUser2 = memberService.findByUsername("user2").get()
-        val memberUser3 = memberService.findByUsername("user3").get()
+        val memberUser1 = memberService.findByUsername("user1")!!
+        val memberUser2 = memberService.findByUsername("user2")!!
+        val memberUser3 = memberService.findByUsername("user3")!!
 
-        val post1 = postService.write(memberUser1, "제목 1", "내용 1")
-        val post2 = postService.write(memberUser1, "제목 2", "내용 2")
-        postService.write(memberUser2, "제목 3", "내용 3")
+        val post1 = postService.write(memberUser1, "제목 1", "내용 1", true, true)
+        val post2 = postService.write(memberUser1, "제목 2", "내용 2", true, true)
+        postService.write(memberUser2, "제목 3", "내용 3", true, true)
 
         post1.addComment(memberUser1, "댓글 1-1")
         post1.addComment(memberUser1, "댓글 1-2")

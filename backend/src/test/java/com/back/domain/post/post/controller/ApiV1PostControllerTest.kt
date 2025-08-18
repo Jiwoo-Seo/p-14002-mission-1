@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+
 package com.back.domain.post.post.controller
 
 import com.back.domain.member.member.service.MemberService
@@ -45,7 +47,7 @@ class ApiV1PostControllerTest(
         ).andDo(print())
 
         // Then
-        val post = postService.findLatest().get()
+        val post = postService.findLatest()!!
 
         resultActions
             .andExpect(handler().handlerType(ApiV1PostController::class.java))
@@ -61,7 +63,7 @@ class ApiV1PostControllerTest(
     @DisplayName("글 쓰기 - 액세스 토큰으로 인증")
     fun `유효한 액세스 토큰으로 글 작성이 성공한다`() {
         // Given
-        val actor = memberService.findByUsername("user1").get()
+        val actor = memberService.findByUsername("user1")!!
         val accessToken = memberService.genAccessToken(actor)
 
         // When
@@ -144,7 +146,7 @@ class ApiV1PostControllerTest(
     fun `권한이 없는 사용자는 글을 수정할 수 없다`() {
         // Given
         val postId = 1L
-        val actor = memberService.findByUsername("user3").get()
+        val actor = memberService.findByUsername("user3")!!
 
         // When
         val resultActions = mvc.perform(
@@ -199,7 +201,7 @@ class ApiV1PostControllerTest(
             .andDo(print())
 
         // Then
-        val post = postService.findById(postId).get()
+        val post = postService.findById(postId)!!
 
         resultActions
             .andExpect(handler().methodName("getItem"))
@@ -219,7 +221,7 @@ class ApiV1PostControllerTest(
             .andDo(print())
 
         // Then
-        val posts = postService.findAll()
+        val posts = postService.findAllByOrderByIdDesc()
 
         resultActions
             .andExpect(handler().methodName("getItems"))

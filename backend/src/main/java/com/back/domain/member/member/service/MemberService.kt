@@ -35,8 +35,8 @@ class MemberService(
         return memberRepository.save(member)
     }
 
-    fun findByUsername(username: String): Optional<Member> =
-        Optional.ofNullable(memberRepository.findByUsername(username))
+    fun findByUsername(username: String): Member? =
+        memberRepository.findByUsername(username)
 
     fun findByApiKey(apiKey: String): Member? =
         memberRepository.findByApiKey(apiKey)
@@ -47,8 +47,8 @@ class MemberService(
     fun payload(accessToken: String): Map<String, Any>? =
         authTokenService.payload(accessToken)
 
-    fun findById(id: Long): Optional<Member> =
-        memberRepository.findById(id)
+    fun findById(id: Long): Member? =
+        memberRepository.findById(id).orElse(null)
 
     fun findAll(): List<Member> =
         memberRepository.findAll()
@@ -65,7 +65,7 @@ class MemberService(
         nickname: String?,
         profileImgUrl: String?
     ): RsData<Member> {
-        val existingMember = findByUsername(username).orElse(null)
+        val existingMember = findByUsername(username)
 
         return if (existingMember == null) {
             val newMember = join(username, password, nickname, profileImgUrl)

@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+
 package com.back.domain.member.member.service
 
 import com.back.standard.util.Ut
@@ -87,7 +89,7 @@ class AuthTokenServiceTest(
     @DisplayName("authTokenService.genAccessToken(member)")
     fun `사용자 액세스 토큰 생성`() {
         // Given
-        val memberUser1 = memberService.findByUsername("user1").get()
+        val memberUser1 = memberService.findByUsername("user1")!!
 
         // When
         val accessToken = authTokenService.genAccessToken(memberUser1)

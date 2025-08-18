@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST", "PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+
 package com.back.domain.member.member.controller
 
 import com.back.domain.member.member.service.MemberService
@@ -79,15 +81,15 @@ class ApiV1AdmMemberControllerTest(
             .andDo(print())
 
         // Then
-        val member = memberService.findById(memberId).get()
+        val member = memberService.findById(memberId)!!
 
         resultActions
             .andExpect(handler().handlerType(ApiV1AdmMemberController::class.java))
             .andExpect(handler().methodName("getItem"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value(member.id))
-            .andExpect(jsonPath("$.createDate").value(startsWith(member.createDate.toString().substring(0, 20))))
-            .andExpect(jsonPath("$.modifyDate").value(startsWith(member.modifyDate.toString().substring(0, 20))))
+            .andExpect(jsonPath("$.createDate").value(startsWith(member.createDate.toString().substring(0, 20)) as org.hamcrest.Matcher<in String>))
+            .andExpect(jsonPath("$.modifyDate").value(startsWith(member.modifyDate.toString().substring(0, 20)) as org.hamcrest.Matcher<in String>))
             .andExpect(jsonPath("$.name").value(member.name))
             .andExpect(jsonPath("$.username").value(member.username))
             .andExpect(jsonPath("$.isAdmin").value(member.isAdmin))
