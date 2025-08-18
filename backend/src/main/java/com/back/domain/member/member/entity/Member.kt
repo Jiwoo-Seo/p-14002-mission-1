@@ -1,9 +1,9 @@
 package com.back.domain.member.member.entity
 
 import com.back.global.jpa.entity.BaseEntity
-import com.back.standard.util.base64Decode
-import com.back.standard.util.base64Encode
-import com.back.standard.util.getOrThrow
+import com.back.standard.extensions.base64Decode
+import com.back.standard.extensions.base64Encode
+import com.back.standard.extensions.getOrThrow
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import org.springframework.security.core.GrantedAuthority

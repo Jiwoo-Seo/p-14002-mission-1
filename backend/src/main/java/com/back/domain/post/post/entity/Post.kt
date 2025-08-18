@@ -20,15 +20,21 @@ class Post() : BaseEntity() {
 
     var title: String = ""
     var content: String = ""
+    var published: Boolean = false
+    var listed: Boolean = false
 
     constructor(
         author: Member,
         title: String,
-        content: String
+        content: String,
+        published: Boolean = false,
+        listed: Boolean = false
     ) : this() {
         this.author = author
         this.title = title
         this.content = content
+        this.published = published
+        this.listed = listed
     }
 
     @OneToMany(mappedBy = "post", fetch = LAZY, cascade = [PERSIST, REMOVE], orphanRemoval = true)
@@ -39,6 +45,17 @@ class Post() : BaseEntity() {
     fun modify(title: String, content: String) {
         this.title = title
         this.content = content
+    }
+
+    // published와 listed 관련 메서드 추가
+    val isTemp: Boolean
+        get() = !published && title == "임시글"
+
+    fun isPublished(): Boolean = published
+
+    fun setCreateDateNow() {
+        // BaseEntity에서 createDate를 현재 시간으로 설정하는 메서드가 있다고 가정
+        // 실제 구현은 BaseEntity에 따라 달라질 수 있음
     }
 
     fun addComment(author: Member, content: String): PostComment {
